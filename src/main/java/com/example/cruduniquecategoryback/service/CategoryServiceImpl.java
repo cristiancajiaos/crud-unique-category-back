@@ -4,6 +4,7 @@ import com.example.cruduniquecategoryback.entity.Category;
 import com.example.cruduniquecategoryback.record.CategoryDTO;
 import com.example.cruduniquecategoryback.repository.CategoryRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,11 @@ public class CategoryServiceImpl implements CategoryService {
   @Override
   public List<CategoryDTO> getAllCategories() {
     return this.categoryRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+  }
+
+  @Override
+  public Optional<CategoryDTO> getCategoryById(Long id) {
+    return this.categoryRepository.findById(id).map(this::convertToDTO);
   }
 
   @Override
