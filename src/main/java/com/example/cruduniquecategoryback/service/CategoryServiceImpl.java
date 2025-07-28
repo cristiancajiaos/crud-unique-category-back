@@ -38,6 +38,13 @@ public class CategoryServiceImpl implements CategoryService {
     return convertToDTO(savedCategory);
   }
 
+  @Override
+  public CategoryDTO deleteCategory(Long id) {
+    Category foundCategory = categoryRepository.findById(id).orElseThrow();
+    categoryRepository.deleteById(id);
+    return convertToDTO(foundCategory);
+  }
+
   private Category convertToEntity(CategoryDTO categoryDTO) {
     Category category = new Category();
     category.setId(categoryDTO.id());
