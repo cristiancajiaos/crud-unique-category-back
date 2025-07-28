@@ -3,6 +3,8 @@ package com.example.cruduniquecategoryback.service;
 import com.example.cruduniquecategoryback.entity.Category;
 import com.example.cruduniquecategoryback.record.CategoryDTO;
 import com.example.cruduniquecategoryback.repository.CategoryRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,19 @@ public class CategoryServiceImpl implements CategoryService {
     this.categoryRepository = categoryRepository;
   }
 
+
+  @Override
+  public List<CategoryDTO> getAllCategories() {
+    return this.categoryRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+  }
+
+  @Override
+  public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+    Category category = convertToEntity(categoryDTO);
+    Category savedCategory = categoryRepository.save(category);
+    return convertToDTO(savedCategory);
+  }
+
   private Category convertToEntity(CategoryDTO categoryDTO) {
     Category category = new Category();
     category.setId(categoryDTO.id());
@@ -27,13 +42,5 @@ public class CategoryServiceImpl implements CategoryService {
   private CategoryDTO convertToDTO(Category category) {
     CategoryDTO categoryDTO = new CategoryDTO(category.getId(), category.getName());
     return categoryDTO;
-  }
-
-  @Override
-  public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-    // System.out.println(categoryDTO.toString());
-    Category category = convertToEntity(categoryDTO);
-    Category savedCategory = categoryRepository.save(category);
-    return convertToDTO(savedCategory);
   }
 }
